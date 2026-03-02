@@ -1,37 +1,37 @@
 // app/api/turn/route.ts
 import { NextResponse } from 'next/server';
 import { getAiDecision } from '../../../src/agent/gemini';
-import { applyRound } from '../../../src/game/engine';
-import { GameState, ActionType, AutonomyLevel, TraceRecord, ActionPayload } from '../../../src/types';
+import { GAME_REGISTRY } from '../../../src/game/registry';
+import { GameState, ActionType, AutonomyLevel, TraceRecord } from '../../../src/types';
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { state, humanAction, autonomy, apiKey } = body as {
+    const { gameId, state, humanAction, autonomy, apiKey } = body as {
+      gameId: string; // receive gameId
       state: GameState;
       humanAction: ActionType;
       autonomy: AutonomyLevel;
       apiKey: string;
     };
 
-    let aiAction: ActionType = 'SHARE';
-    
-    // explicitly define type as ActionPayload
-    let aiDecision: ActionPayload = { 
-      type: 'SHARE', 
-      explanation: 'Observer Mode: No AI inference. Defaulting to SHARE.', 
-      confidence: 1 
-    };
+    const gameMeta = GAME_REGISTRY[gameId];
+    if (!gameMeta) return NextResponse.json({ error: 'Game not found' }, { status: 404 });
 
-    // skip LLM call if autonomy is 0
+    const adapter = gameMeta.adapter;
+    const legalActions = adapter.listLegalActions(state);
+
+    let aiDecision = { type: legalActions[0], explanation: 'Observer Mode.', confidence: 1 };
+
     if (autonomy > 0) {
-      if (!apiKey) return NextResponse.json({ error: 'API Key is required' }, { status: 401 });
-      const decision = await getAiDecision(state, autonomy, apiKey);
-      aiDecision = decision;
-      aiAction = decision.type;
+      if (!apiKey) return NextResponse.json({ error: 'API Key required' }, { status: 401 });
+      // pass gameId and legalActions to agent
+      const decision = await getAiDecision(gameId, legalActions, state, autonomy, apiKey);
+      aiDecision = decision as any;
     }
 
-    const newState = applyRound(state, humanAction, aiAction);
+    // apply logic using specific adapter
+    const newState = adapter.applyRound(state, humanAction, aiDecision.type as ActionType);
 
     const trace: TraceRecord = {
       traceId: crypto.randomUUID(),
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       actor: 'ai',
       autonomyLevel: autonomy,
       stateSummary: state,
-      legalActions: ['SHARE', 'STEAL'],
+      legalActions: legalActions as ActionType[],
       modelOutput: aiDecision,
       isValidated: true,
     };

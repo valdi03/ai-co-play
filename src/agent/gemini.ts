@@ -2,43 +2,46 @@
 import { GoogleGenAI } from '@google/genai';
 import { GameState, ActionPayload, AutonomyLevel } from '../types';
 
-function buildPrompt(state: GameState, autonomy: AutonomyLevel, retryError?: string): string {
+function buildPrompt(
+  gameId: string, 
+  legalActions: string[], 
+  state: GameState, 
+  autonomy: AutonomyLevel, 
+  retryError?: string
+): string {
   let prompt = `
-  Role: AI player in a 'Share or Steal' game.
+  Role: AI player in a game called [${gameId}].
   Autonomy Level: ${autonomy} (0=Observer, 1=Advisor, 2=Executor, 3=Teammate, 4=Leader).
-  Round: ${state.currentRound} / ${state.maxRounds}.
-  Scores - Human: ${state.scores.human}, AI: ${state.scores.ai}.
-  History: ${JSON.stringify(state.history)}
-
-  Analyze history and decide next move.
-  Legal Actions: "SHARE" or "STEAL".
+  Current State: ${JSON.stringify(state)}
+  
+  Your goal: Win the game or cooperate based on the game type.
+  Legal Actions: ${JSON.stringify(legalActions)}.
   Output valid JSON ONLY.
   `;
 
   if (retryError) {
-    prompt += `\nWARNING: Your previous response failed validation.\nError: ${retryError}\nPlease correct your output and try again.`;
+    prompt += `\nWARNING: Previous response failed. Error: ${retryError}. Correct it.`;
   }
 
   return prompt;
 }
 
-// require apiKey as parameter
 export async function getAiDecision(
+  gameId: string,
+  legalActions: string[],
   state: GameState, 
   autonomy: AutonomyLevel, 
   apiKey: string, 
   maxRetries = 2
 ): Promise<ActionPayload> {
   
-  if (!apiKey) throw new Error('API Key is missing');
-  
-  // init client dynamically
+  if (!apiKey) throw new Error('API Key missing');
   const ai = new GoogleGenAI({ apiKey });
   let lastError = '';
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const prompt = buildPrompt(state, autonomy, attempt > 0 ? lastError : undefined);
+      const prompt = buildPrompt(gameId, legalActions, state, autonomy, attempt > 0 ? lastError : undefined);
       
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
@@ -48,7 +51,7 @@ export async function getAiDecision(
           responseSchema: {
             type: 'OBJECT',
             properties: {
-              type: { type: 'STRING', enum: ['SHARE', 'STEAL'] },
+              type: { type: 'STRING' }, // dynamic type
               confidence: { type: 'NUMBER' },
               explanation: { type: 'STRING' }
             },
@@ -58,21 +61,20 @@ export async function getAiDecision(
       });
 
       const text = response.text;
-      if (!text) throw new Error('Empty model response');
-
       const parsed = JSON.parse(text) as ActionPayload;
       
-      if (parsed.type !== 'SHARE' && parsed.type !== 'STEAL') {
-        throw new Error(`Invalid action type: ${parsed.type}`);
+      // dynamic validation against legalActions
+      if (!legalActions.includes(parsed.type)) {
+        throw new Error(`Invalid action: ${parsed.type}. Must be one of ${legalActions.join(',')}`);
       }
 
       return parsed;
 
     } catch (error: any) {
-      lastError = error.message || 'Unknown parsing error';
-      console.warn(`[Attempt ${attempt + 1}/${maxRetries + 1}] Validation failed: ${lastError}`);
+      lastError = error.message;
+      console.warn(`[Attempt ${attempt + 1}] failed: ${lastError}`);
     }
   }
 
-  return { type: 'SHARE', confidence: 0, explanation: 'Fallback executed due to multiple AI validation failures.' };
+  return { type: legalActions[0], confidence: 0, explanation: 'Fallback to first legal action.' };
 }

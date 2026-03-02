@@ -1,19 +1,20 @@
 // src/types/index.ts
 
 export type PlayerRole = 'human' | 'ai';
-export type ActionType = 'SHARE' | 'STEAL';
+// Add all possible actions from all games here
+export type ActionType = 'SHARE' | 'STEAL' | 'CHOP_TOMATO' | 'CHOP_LETTUCE' | 'SERVE' | 'CLEAN';
 export type AutonomyLevel = 0 | 1 | 2 | 3 | 4;
 
 export interface ActionPayload {
-  type: ActionType;
+  type: string; // Changed to string to be more flexible for dynamic games
   confidence?: number;
   explanation?: string;
 }
 
 export interface RoundRecord {
   round: number;
-  humanAction: ActionType;
-  aiAction: ActionType;
+  humanAction: string;
+  aiAction: string;
 }
 
 export interface GameState {
@@ -25,6 +26,8 @@ export interface GameState {
   };
   history: RoundRecord[];
   isTerminal: boolean;
+  // allow additional properties for different games
+  [key: string]: any; 
 }
 
 export interface TraceRecord {
@@ -33,15 +36,13 @@ export interface TraceRecord {
   actor: PlayerRole;
   autonomyLevel: AutonomyLevel;
   stateSummary: GameState;
-  legalActions: ActionType[];
+  legalActions: string[];
   modelOutput: ActionPayload | null;
   isValidated: boolean;
 }
 
-// src/types/index.ts
-
 export interface GameAdapter {
   getInitialState(): GameState;
-  listLegalActions(state: GameState): ActionType[];
-  applyRound(state: GameState, humanAction: ActionType, aiAction: ActionType): GameState;
+  listLegalActions(state: GameState): string[];
+  applyRound(state: GameState, humanAction: string, aiAction: string): GameState;
 }
