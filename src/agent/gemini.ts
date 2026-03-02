@@ -61,6 +61,12 @@ export async function getAiDecision(
       });
 
       const text = response.text;
+      
+      // Add this safety check for TypeScript
+      if (!text) {
+        throw new Error("Received empty response from AI");
+      }
+      
       const parsed = JSON.parse(text) as ActionPayload;
       
       // dynamic validation against legalActions
