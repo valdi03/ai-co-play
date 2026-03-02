@@ -17,7 +17,7 @@ export interface MonopolyState extends GameState {
 export const monopolyAdapter: GameAdapter = {
   getInitialState: (): MonopolyState => ({
     currentRound: 1,
-    maxRounds: 5,
+    maxRounds: 10,
     isTerminal: false,
     scores: { human: 1000, ai: 1000 },
     history: [],

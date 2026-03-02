@@ -28,10 +28,27 @@ export default function Lobby() {
     <main className="min-h-screen p-8 bg-gray-50 text-gray-900 font-sans">
       <div className="max-w-4xl mx-auto space-y-8">
         
-        {/* Header - Fixed: No italics */}
-        <div className="text-center py-10">
-          <h1 className="text-3xl font-bold mb-2">AI Co-Play Platform</h1>
-          <p className="text-gray-500">Select an environment to start playing with AI.</p>
+        {/* Hero */}
+        <div className="text-center py-10 space-y-5">
+          <span className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 uppercase tracking-wider">
+            Autonomous Multi-Agent Gameplay
+          </span>
+          <h1 className="text-5xl md:text-6xl font-black leading-tight tracking-tight">
+            AI Co-Play
+          </h1>
+          <p className="text-lg md:text-xl font-semibold text-gray-700">
+            This Is Not Just Another Game Lobby.
+          </p>
+          <p className="text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Play against AI agents that make their own strategic decisions from live game state and legal moves.
+            No scripted first-round behavior. No fixed difficulty rails. Just adaptive, autonomous play.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mx-auto pt-2">
+            <div className="bg-white border border-gray-200 rounded-xl p-3 text-sm font-semibold text-gray-700">🧠 Real-time AI reasoning</div>
+            <div className="bg-white border border-gray-200 rounded-xl p-3 text-sm font-semibold text-gray-700">⚖️ Legal-action constrained decisions</div>
+            <div className="bg-white border border-gray-200 rounded-xl p-3 text-sm font-semibold text-gray-700">📊 Transparent decision trace</div>
+          </div>
+          <p className="text-sm font-semibold text-gray-500">built by @lerenaminy</p>
         </div>
 
         {/* Global API Settings */}

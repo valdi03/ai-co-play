@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal docs (not required for running the project)
+IMPLEMENTATION_STATUS.md
+PROJECT_STATUS.md
+UI_ENHANCEMENTS.md
+VISUAL_DEMO.md
+VISUAL_DESIGN_COMPLETION.md
+VISUAL_IMPROVEMENTS_SUMMARY.md

@@ -36,7 +36,7 @@ function countMatchingFace(allDice: number[], faceValue: number): number {
   return allDice.filter(d => d === faceValue).length;
 }
 
-export function createLiarsDiceInitialState(maxRounds = 5): LiarsDiceState {
+export function createLiarsDiceInitialState(maxRounds = 7): LiarsDiceState {
   return {
     currentRound: 1,
     maxRounds,

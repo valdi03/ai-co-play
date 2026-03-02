@@ -8,7 +8,7 @@ export interface OvercookedState extends GameState {
   };
 }
 
-export function createOvercookedInitialState(maxRounds = 5): OvercookedState {
+export function createOvercookedInitialState(maxRounds = 10): OvercookedState {
   return {
     currentRound: 1,
     maxRounds,

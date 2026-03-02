@@ -1,7 +1,7 @@
 import { GameState, ActionType } from '../types';
 
 // init game state
-export function createInitialState(maxRounds = 5): GameState {
+export function createInitialState(maxRounds = 8): GameState {
   return {
     currentRound: 1,
     maxRounds,

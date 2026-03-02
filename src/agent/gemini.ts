@@ -55,8 +55,9 @@ export async function getGeminiAction(
   const parsed = JSON.parse(text) as ActionPayload;
   
   if (!legalActions.includes(parsed.type)) {
-    parsed.type = legalActions[0];
-    parsed.explanation = "fallback move";
+    const randomIndex = Math.floor(Math.random() * legalActions.length);
+    parsed.type = legalActions[randomIndex];
+    parsed.explanation = "fallback random legal move";
   }
 
   return parsed;
