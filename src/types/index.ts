@@ -4,6 +4,7 @@ export type PlayerRole = 'human' | 'ai';
 // Add all possible actions from all games here
 export type ActionType = 'SHARE' | 'STEAL' | 'CHOP_TOMATO' | 'CHOP_LETTUCE' | 'SERVE' | 'CLEAN';
 export type AutonomyLevel = 0 | 1 | 2 | 3 | 4;
+export type DifficultyLevel = 0 | 1 | 2; // 0 = Easy, 1 = Normal, 2 = Hard
 
 export interface ActionPayload {
   type: string; // Changed to string to be more flexible for dynamic games
@@ -35,6 +36,7 @@ export interface TraceRecord {
   timestamp: string;
   actor: PlayerRole;
   autonomyLevel: AutonomyLevel;
+  difficultyLevel?: DifficultyLevel;
   stateSummary: GameState;
   legalActions: string[];
   modelOutput: ActionPayload | null;

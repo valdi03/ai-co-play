@@ -2,13 +2,13 @@
 import { NextResponse } from 'next/server';
 import { getGeminiAction } from '../../../src/agent/gemini';
 import { GAME_REGISTRY } from '../../../src/game/registry';
-import { GameState, TraceRecord, AutonomyLevel } from '../../../src/types';
+import { GameState, TraceRecord, AutonomyLevel, DifficultyLevel } from '../../../src/types';
 
 export async function POST(req: Request) {
   try {
     // step 1: parse request
     const body = await req.json();
-    const { gameId, state, humanAction, autonomy, apiKey } = body;
+    const { gameId, state, humanAction, difficulty, apiKey } = body;
 
     const gameMeta = GAME_REGISTRY[gameId];
     const adapter = gameMeta?.adapter;
@@ -31,7 +31,8 @@ export async function POST(req: Request) {
       traceId: Date.now().toString(),
       timestamp: Date.now().toString(),
       actor: 'ai',
-      autonomyLevel: autonomy as AutonomyLevel,
+      autonomyLevel: 3 as AutonomyLevel, // AI is always autonomous
+      difficultyLevel: difficulty as DifficultyLevel,
       stateSummary: state,
       legalActions: legalActions,
       modelOutput: aiPayload,

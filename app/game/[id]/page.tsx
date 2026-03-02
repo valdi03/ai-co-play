@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { GameState, ActionType, AutonomyLevel, TraceRecord } from '../../../src/types';
+import { GameState, ActionType, AutonomyLevel, TraceRecord, DifficultyLevel } from '../../../src/types';
 import { GAME_REGISTRY } from '../../../src/game/registry';
 
 export default function GameRoom() {
@@ -15,11 +15,10 @@ export default function GameRoom() {
   const adapter = gameMeta?.adapter;
 
   const [state, setState] = useState<any>(null);
-  const [autonomy, setAutonomy] = useState<AutonomyLevel>(2);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(1); // 0=Easy, 1=Normal, 2=Hard
   const [loading, setLoading] = useState(false);
   const [traces, setTraces] = useState<TraceRecord[]>([]);
   const [apiKey, setApiKey] = useState('');
-  const [pendingResult, setPendingResult] = useState<any>(null);
 
   useEffect(() => {
     if (adapter && !state) setState(adapter.getInitialState());
@@ -39,7 +38,7 @@ export default function GameRoom() {
       const res = await fetch('/api/turn', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId: id, state, humanAction: action, autonomy, apiKey })
+        body: JSON.stringify({ gameId: id, state, humanAction: action, difficulty, apiKey })
       });
       const data = await res.json();
       
@@ -50,26 +49,15 @@ export default function GameRoom() {
         return;
       }
 
-      if (autonomy >= 3 || autonomy === 0) {
-        if (data.newState) setState(data.newState);
-        if (data.trace) setTraces((prev) => [data.trace, ...prev]);
-      } else {
-        setPendingResult({ newState: data.newState, trace: data.trace });
-      }
+      // AI is always autonomous - directly apply the result
+      if (data.newState) setState(data.newState);
+      if (data.trace) setTraces((prev) => [data.trace, ...prev]);
     } catch (err) {
       console.error("Network error:", err);
       alert("Failed to communicate with Agent.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleApprove = () => {
-    setState(pendingResult.newState);
-    if (pendingResult.trace) {
-      setTraces((prev) => [pendingResult.trace, ...prev]);
-    }
-    setPendingResult(null);
   };
 
   const RuleBook = () => (
@@ -164,6 +152,18 @@ export default function GameRoom() {
           
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <h1 className="text-3xl font-bold mb-2">{gameMeta.name}</h1>
+            
+            {/* AI Role Indicator */}
+            <div className="mb-6 p-3 bg-gray-50 rounded-lg inline-flex items-center gap-3">
+              <span className="text-lg">🤖</span>
+              <div className="text-left">
+                <p className="text-xs font-bold text-gray-500 uppercase">AI Role</p>
+                <p className="text-sm font-bold text-gray-700">
+                  {id === 'overcooked-lite' ? '🤝 Teammate' : '⚔️ Opponent'}
+                </p>
+              </div>
+            </div>
+            
             <p className="text-sm font-bold text-gray-400 mb-6">Environment Progress: {state.currentRound} / {state.maxRounds}</p>
             
             <div className="w-full bg-gray-100 h-3 rounded-full mb-8 overflow-hidden">
@@ -171,9 +171,9 @@ export default function GameRoom() {
             </div>
 
             <div className="flex justify-center gap-20">
-              <div className="space-y-1"><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Human Team</p><p className="text-5xl font-bold text-blue-500">{state.scores.human}</p></div>
+              <div className="space-y-1"><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">👤 You</p><p className="text-5xl font-bold text-blue-500">{state.scores.human}</p></div>
               <div className="h-16 w-px bg-gray-100"></div>
-              <div className="space-y-1"><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">AI Partner</p><p className="text-5xl font-bold text-red-500">{state.scores.ai}</p></div>
+              <div className="space-y-1"><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">🤖 AI</p><p className="text-5xl font-bold text-red-500">{state.scores.ai}</p></div>
             </div>
           </div>
 
@@ -269,38 +269,37 @@ export default function GameRoom() {
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
             <div className="mb-8">
               <div className="flex justify-between items-center mb-3">
-                <p className="text-sm font-bold uppercase tracking-widest">AI Autonomy Level</p>
-                <span className="bg-blue-100 text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase">Level {autonomy}</span>
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-widest">AI Opponent Level</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {difficulty === 0 ? '🟢 Easy - AI plays cautiously' : difficulty === 1 ? '🟡 Normal - Balanced strategy' : '🔴 Hard - AI plays aggressively'}
+                  </p>
+                </div>
+                <span className="bg-blue-100 text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                  {difficulty === 0 ? 'Easy' : difficulty === 1 ? 'Normal' : 'Hard'}
+                </span>
               </div>
-              <input type="range" min="0" max="4" value={autonomy} onChange={(e) => setAutonomy(Number(e.target.value) as any)} className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+              <input type="range" min="0" max="2" value={difficulty} onChange={(e) => setDifficulty(Number(e.target.value) as DifficultyLevel)} className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+              <div className="flex justify-between text-xs text-gray-400 mt-2">
+                <span>Easy</span>
+                <span>Normal</span>
+                <span>Hard</span>
+              </div>
             </div>
 
             {!state.isTerminal ? (
-              pendingResult ? (
-                <div className="p-8 bg-blue-50 rounded-2xl border border-blue-100 animate-pulse">
-                  <p className="text-xs font-bold text-blue-600 mb-2 uppercase tracking-widest">Agent Proposal</p>
-                  {/* Safety net: added optional chaining '?.' to handle undefined traces */}
-                  <p className="font-bold text-xl text-blue-900 mb-4">{pendingResult.trace?.modelOutput?.type || 'UNKNOWN_ACTION'}</p>
-                  <p className="text-sm text-blue-700/70 italic mb-6">"{pendingResult.trace?.modelOutput?.explanation || 'Agent failed to provide reasoning.'}"</p>
-                  <div className="flex gap-4">
-                    <button onClick={handleApprove} className="flex-1 bg-blue-500 text-white font-bold py-4 rounded-xl hover:bg-blue-600 shadow-lg shadow-blue-100 transition-all uppercase tracking-widest text-xs">Execute Action</button>
-                    <button onClick={() => setPendingResult(null)} className="flex-1 bg-white text-gray-400 font-bold py-4 rounded-xl border border-gray-200 uppercase tracking-widest text-xs">Decline</button>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-4">
-                  {adapter.listLegalActions(state).map((action, idx) => (
-                    <button 
-                      key={action} 
-                      onClick={() => playTurn(action)} 
-                      disabled={loading}
-                      className={`py-5 rounded-2xl font-bold text-white transition-all active:scale-95 shadow-md uppercase tracking-widest text-xs ${idx % 2 === 0 ? 'bg-blue-500 hover:bg-blue-600 shadow-blue-100' : 'bg-red-500 hover:bg-red-600 shadow-red-100'} disabled:opacity-30`}
-                    >
-                      {loading ? 'Processing...' : action}
-                    </button>
-                  ))}
-                </div>
-              )
+              <div className="grid grid-cols-2 gap-4">
+                {adapter.listLegalActions(state).map((action, idx) => (
+                  <button 
+                    key={action} 
+                    onClick={() => playTurn(action)} 
+                    disabled={loading}
+                    className={`py-5 rounded-2xl font-bold text-white transition-all active:scale-95 shadow-md uppercase tracking-widest text-xs ${idx % 2 === 0 ? 'bg-blue-500 hover:bg-blue-600 shadow-blue-100' : 'bg-red-500 hover:bg-red-600 shadow-red-100'} disabled:opacity-30`}
+                  >
+                    {loading ? 'Processing...' : action}
+                  </button>
+                ))}
+              </div>
             ) : (
               <button onClick={() => setState(adapter.getInitialState())} className="w-full bg-gray-900 text-white py-5 font-bold rounded-2xl hover:bg-black transition-all shadow-xl uppercase tracking-[0.3em]">Restart Session</button>
             )}
